@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.api.product.dto.ProductDto;
+import ru.gb.service.CategoryService;
+import ru.gb.service.ManufacturerService;
 import ru.gb.service.ProductService;
 import ru.gb.web.dto.ProductManufacturerDto;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final CategoryService categoryService;
+    private final ManufacturerService manufacturerService;
 
     @GetMapping
     public List<ProductDto> getProductList() {
@@ -44,10 +48,28 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> handlePost(@Validated @RequestBody ProductDto productDto) {
-        ProductDto savedProduct = productService.save(productDto);
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProduct.getId()));
-        return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        if (checkProductDtoForCategoriesAndManufacturer(productDto)) {
+            ProductDto savedProduct = productService.save(productDto);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setLocation(URI.create("/api/v1/product/" + savedProduct.getId()));
+            return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    private boolean checkProductDtoForCategoriesAndManufacturer(ProductDto productDto) {
+        if (productDto.getCategories().size() == 0 ||
+                productDto.getManufacturer().isBlank() ||
+                manufacturerService.findByName(productDto.getManufacturer()) == null) {
+            return false;
+        }
+        for (String category : productDto.getCategories()) {
+            if (categoryService.findByTitle(category) == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @PutMapping("/{productId}")

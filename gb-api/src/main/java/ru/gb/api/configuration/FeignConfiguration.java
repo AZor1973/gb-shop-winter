@@ -24,50 +24,50 @@ import static feign.FeignException.errorStatus;
 
 
 @Configuration
-@EnableFeignClients(clients = {CategoryGateway.class,
+@EnableFeignClients(clients = {CategoryGateway.class, ManufacturerGateway.class,
         ProductGateway.class})
-@EnableConfigurationProperties(GbApiProperties.class)
+//@EnableConfigurationProperties(GbApiProperties.class)
 @RequiredArgsConstructor
 public class FeignConfiguration {
 
-    private final GbApiProperties gbApiProperties;
-    private final ObjectFactory<HttpMessageConverters> messageConverters;
-
-    @Bean
-    public ManufacturerGateway manufacturerGateway() {
-
-        return Feign.builder()
-                .encoder(new SpringEncoder(this.messageConverters))
-                .decoder(new OptionalDecoder(new ResponseEntityDecoder(new SpringDecoder(this.messageConverters))))
-                .options(new Request.Options(
-                        gbApiProperties.getConnection().getConnectTimeoutMillis(),
-                        gbApiProperties.getConnection().getReadTimeoutMillis()
-                ))
-                .logger(new Slf4jLogger(ManufacturerGateway.class))
-                .logLevel(Logger.Level.FULL)
-                .retryer(new Retryer.Default(
-                        gbApiProperties.getConnection().getPeriod(),
-                        gbApiProperties.getConnection().getMaxPeriod(),
-                        gbApiProperties.getConnection().getMaxAttempts()
-                ))
-                .errorDecoder(errorDecoder())
-                .contract(new SpringMvcContract())
-                .target(ManufacturerGateway.class, gbApiProperties.getEndpoint().getManufacturerUrl());
-    }
-
-    private ErrorDecoder errorDecoder() {
-        return (methodKey, response) -> {
-            FeignException feignException = errorStatus(methodKey, response);
-            if (feignException.status() == 500 || feignException.status() == 503) {
-                return new RetryableException(
-                        response.status(),
-                        feignException.getMessage(),
-                        response.request().httpMethod(),
-                        feignException,
-                        null,
-                        response.request());
-            }
-            return feignException;
-        };
-    }
+//    private final GbApiProperties gbApiProperties;
+//    private final ObjectFactory<HttpMessageConverters> messageConverters;
+//
+//    @Bean
+//    public ManufacturerGateway manufacturerGateway() {
+//
+//        return Feign.builder()
+//                .encoder(new SpringEncoder(this.messageConverters))
+//                .decoder(new OptionalDecoder(new ResponseEntityDecoder(new SpringDecoder(this.messageConverters))))
+//                .options(new Request.Options(
+//                        gbApiProperties.getConnection().getConnectTimeoutMillis(),
+//                        gbApiProperties.getConnection().getReadTimeoutMillis()
+//                ))
+//                .logger(new Slf4jLogger(ManufacturerGateway.class))
+//                .logLevel(Logger.Level.FULL)
+//                .retryer(new Retryer.Default(
+//                        gbApiProperties.getConnection().getPeriod(),
+//                        gbApiProperties.getConnection().getMaxPeriod(),
+//                        gbApiProperties.getConnection().getMaxAttempts()
+//                ))
+//                .errorDecoder(errorDecoder())
+//                .contract(new SpringMvcContract())
+//                .target(ManufacturerGateway.class, gbApiProperties.getEndpoint().getManufacturerUrl());
+//    }
+//
+//    private ErrorDecoder errorDecoder() {
+//        return (methodKey, response) -> {
+//            FeignException feignException = errorStatus(methodKey, response);
+//            if (feignException.status() == 500 || feignException.status() == 503) {
+//                return new RetryableException(
+//                        response.status(),
+//                        feignException.getMessage(),
+//                        response.request().httpMethod(),
+//                        feignException,
+//                        null,
+//                        response.request());
+//            }
+//            return feignException;
+//        };
+//    }
 }

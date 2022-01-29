@@ -12,6 +12,8 @@ import ru.gb.entity.Product;
 import ru.gb.web.dto.ProductManufacturerDto;
 
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(uses = ManufacturerMapper.class)
 public interface ProductMapper {
@@ -30,12 +32,13 @@ public interface ProductMapper {
         return manufacturer.getName();
     }
 
-    default Category getCategory(String category, @Context CategoryDao categoryDao) {
-        return categoryDao.findByTitle(category).orElseThrow(NoSuchElementException::new);
+    default Set<Category> getCategories(Set<String> categories, @Context CategoryDao categoryDao) {
+        return categories.stream().map(c -> categoryDao.findByTitle(c).orElseThrow(NoSuchElementException::new))
+                .collect(Collectors.toSet());
     }
 
-    default String getCategory(Category category) {
-        return category.getTitle();
+    default Set<String> getCategories(Set<Category> categories) {
+        return categories.stream().map(Category::getTitle).collect(Collectors.toSet());
     }
 
 }

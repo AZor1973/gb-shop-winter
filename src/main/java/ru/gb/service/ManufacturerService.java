@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gb.api.manufacturer.dto.ManufacturerDto;
 import ru.gb.dao.ManufacturerDao;
 import ru.gb.entity.Manufacturer;
-import ru.gb.entity.Product;
-import ru.gb.entity.enums.Status;
 import ru.gb.web.dto.mapper.ManufacturerMapper;
 
 import java.util.List;
@@ -40,6 +38,10 @@ public class ManufacturerService {
         return manufacturerMapper.toManufacturerDto(manufacturerDao.findById(id).orElse(null));
     }
 
+    @Transactional(readOnly = true)
+    public ManufacturerDto findByName(String name) {
+        return manufacturerMapper.toManufacturerDto(manufacturerDao.findByName(name).orElse(null));
+    }
 
     public List<ManufacturerDto> findAll() {
         return manufacturerDao.findAll().stream().map(manufacturerMapper::toManufacturerDto).collect(Collectors.toList());

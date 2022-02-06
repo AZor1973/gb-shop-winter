@@ -1,3 +1,4 @@
 [submodule "gb-api"]
 	path = gb-api
 	url = git@github.com:AZor1973/gb-api.git
+	branch = master

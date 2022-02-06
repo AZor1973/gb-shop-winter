@@ -1,4 +1,3 @@
 [submodule "gb-api"]
 	path = gb-api
-	url = git@github.com:kropotov-geekbrains/gb-api.git
-	branch = master
+	url = git@github.com:AZor1973/gb-api.git

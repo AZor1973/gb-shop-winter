@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Mapper(uses = ManufacturerMapper.class)
+@Mapper(uses = {ManufacturerMapper.class, CategoryMapper.class})
 public interface ProductMapper {
     Product toProduct(ProductDto productDto, @Context ManufacturerDao manufacturerDao, @Context CategoryDao categoryDao);
 

@@ -16,17 +16,35 @@ ext {
     set('springCloudVersion', "2021.0.0")
 }
 
+compileJava {
+    options.compilerArgs += [
+            '-Amapstruct.defaultComponentModel=spring'
+    ]
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.8.RELEASE'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation files('../lib/gb-api-0.1.23-plain.jar')
+    runtimeOnly 'org.postgresql:postgresql'
+
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.4.2.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+
+
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    implementation files('../lib/gb-api-0.1.24-plain.jar')
 }
 
 dependencyManagement {

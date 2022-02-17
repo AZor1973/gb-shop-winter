@@ -48,7 +48,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-    implementation files('lib/gb-api-0.1.22-plain.jar')
+    implementation files('lib/gb-api-0.1.24-plain.jar')
 }
 
 test {

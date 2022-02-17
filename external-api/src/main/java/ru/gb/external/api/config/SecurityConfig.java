@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(
                 (requests) -> {
-                    requests.antMatchers("/product").permitAll();
+                    requests.antMatchers("/api/v1/product").permitAll();
                     requests.antMatchers(LOGIN_ENDPOINT).permitAll();
                     requests.antMatchers(HttpMethod.POST, USER_ENDPOINT).permitAll();
                     requests.antMatchers(USER_ENDPOINT).hasRole("ADMIN");

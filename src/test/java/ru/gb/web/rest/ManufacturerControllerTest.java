@@ -31,7 +31,7 @@ class ManufacturerControllerTest {
     ManufacturerService manufacturerService;
 
     @InjectMocks
-    ManufacturerController manufacturerController;
+    ManufacturerRestController manufacturerController;
 
     MockMvc mockMvc;
 

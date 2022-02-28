@@ -13,6 +13,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -44,6 +45,16 @@ public class Product extends InfoEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
+
+    @Singular
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
+    private List<ProductImage> images;
+
+    @Column(name = "short_description")
+    private String shortDescription;
+
+    @Column(name = "full_description")
+    private String fullDescription;
 
     @Override
     public String toString() {

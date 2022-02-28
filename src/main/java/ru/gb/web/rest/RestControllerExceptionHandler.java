@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 
 @ControllerAdvice
 @Slf4j
-public class ControllerExceptionHandler {
+public class RestControllerExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> validationErrorHandler(NoSuchElementException e) {

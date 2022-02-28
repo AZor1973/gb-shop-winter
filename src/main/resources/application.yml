@@ -1,7 +1,7 @@
 server:
   port: 8080
-  servlet:
-    context-path: '/internal'
+#  servlet:
+#    context-path: '/internal'
 spring:
   profiles:
     active: ${SPRING_PROFILES_INCLUDE:dev}
@@ -12,3 +12,5 @@ spring:
       label: ${SPRING_CLOUD_CONFIG_LABEL:master}
       username: ${SPRING_CLOUD_CONFIG_USERNAME:geek_user}
       password: ${SPRING_CLOUD_CONFIG_PASSWORD:geek_pass}
+  zipkin:
+    enabled: false

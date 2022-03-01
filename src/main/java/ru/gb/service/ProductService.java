@@ -45,6 +45,7 @@ public class ProductService {
                     (p) -> product.setVersion(p.getVersion())
             );
         }
+        System.out.println(product.getCategories());
         return productMapper.toProductDto(productDao.save(product));
     }
 

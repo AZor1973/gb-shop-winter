@@ -12,6 +12,7 @@ import ru.gb.entity.Manufacturer;
 import ru.gb.entity.Product;
 import ru.gb.web.dto.ProductManufacturerDto;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,12 +37,23 @@ public interface ProductMapper {
     }
 
     // todo ДЗ - если что поменять здесь маппинг на list of ids to set of category
-    default Set<Category> categoryDtoSetToCategorySet(Set<CategoryDto> categories, @Context CategoryDao categoryDao) {
-        return categories.stream().map(c -> categoryDao.findByTitleAndId(c.getTitle(), c.getCategoryId())
-                        .orElseThrow(
-                                () -> new NoSuchElementException("There isn't category with name " + c.getTitle())
-                        ))
+//    default Set<Category> categoryDtoSetToCategorySet(Set<CategoryDto> categories, @Context CategoryDao categoryDao) {
+//        return categories.stream().map(c -> categoryDao.findByTitleAndId(c.getTitle(), c.getCategoryId())
+//                        .orElseThrow(
+//                                () -> new NoSuchElementException("There isn't category with name " + c.getTitle())
+//                        ))
+//                .collect(Collectors.toSet());
+//    }
+
+    default Set<Category> getCategories(Set<String> categories, @Context CategoryDao categoryDao) {
+        return categories.stream().map(s -> categoryDao.findByTitle(s).orElseThrow(
+                        () -> new NoSuchElementException("There isn't category with name " + s)
+                ))
                 .collect(Collectors.toSet());
     }
 
+    default Set<String> getCategories (Set<Category> categories){
+        return categories.stream()
+                .map(Category::getTitle).collect(Collectors.toSet());
+    }
 }

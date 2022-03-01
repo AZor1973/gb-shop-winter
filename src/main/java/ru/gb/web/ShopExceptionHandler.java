@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import ru.gb.exceptions.ProductImageNotFoundException;
 import ru.gb.exceptions.ProductNotFoundException;
 
 @Slf4j
@@ -20,9 +21,10 @@ public class ShopExceptionHandler {
 
 
     // todo ДЗ - сделать обработку исключения в случае если не найдено изображение
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    @ExceptionHandler(ProductImageNotFoundException.class)
-//    public String handleProductNotFoundException(final ProductImageNotFoundException exception) {
-//
-//    }
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductImageNotFoundException.class)
+    public String handleProductImageNotFoundException(final ProductImageNotFoundException exception) {
+        log.error("Product image not found thrown", exception);
+        return "not-found";
+    }
 }

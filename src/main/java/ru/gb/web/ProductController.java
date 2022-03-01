@@ -12,6 +12,7 @@ import ru.gb.dao.ProductImageDao;
 import ru.gb.dao.security.AccountUserDao;
 import ru.gb.entity.Product;
 import ru.gb.entity.security.AccountUser;
+import ru.gb.exceptions.ProductImageNotFoundException;
 import ru.gb.service.CategoryService;
 import ru.gb.service.ManufacturerService;
 import ru.gb.service.ProductImageService;
@@ -65,6 +66,7 @@ public class ProductController {
             return "redirect:/product/all";
         }
         model.addAttribute("product", productDto);
+        model.addAttribute("images", new String[productImageService.imageQuantityByProductId(id)]);
         return "product/product-info";
     }
 
@@ -85,14 +87,26 @@ public class ProductController {
 
     // todo ДЗ* - сделать поддержку множества картинок для для страницы подробной информации с продуктами
     @GetMapping(value = "images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
     public byte[] getImage(@PathVariable Long id) throws IOException {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             ImageIO.write(productImageService.loadFileAsResource(id), "png", byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
-            throw e; // todo ДЗ - заменить на ProductImageNotFoundException
+            throw new ProductImageNotFoundException(productImageService.getImageNameByProductId(id)); // todo ДЗ - заменить на ProductImageNotFoundException
         }
     }
 
+    @GetMapping(value = "allImages/{id}/{i}", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
+    public byte[] getImages(@PathVariable Long id, @PathVariable Integer i) throws IOException {
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ImageIO.write(productImageService.loadAllFilesAsResource(id, i - 1), "png", byteArrayOutputStream);
+            return byteArrayOutputStream.toByteArray();
+        } catch (IOException e) {
+            throw new ProductImageNotFoundException(productImageService.getImageNameByProductId(id));
+        }
+    }
 }

@@ -33,9 +33,10 @@
                     </form>
                 </li>
                 <li sec:authorize="isAnonymous()" class="nav-item">
-                    <form th:action="@{/login}" method="POST">
-                        <input type="submit" class="btn btn-danger" value="Войти"/>
-                    </form>
+                    <a type="submit" class="btn btn-success" th:href="@{/auth/login}">Войти</a>
+                </li>
+                <li sec:authorize="isAnonymous()" class="nav-item">
+                    <a type="submit" class="btn btn-primary" th:href="@{/auth/registration}">Регистрация</a>
                 </li>
             </ul>
         </div>

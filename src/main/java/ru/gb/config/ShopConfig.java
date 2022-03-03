@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.gb.dao.security.AccountUserDao;
 import ru.gb.entity.security.AccountUser;
 
@@ -26,5 +28,10 @@ public class ShopConfig {
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getName);
 //                .flatMap(accountUserDao::findByUsername);
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

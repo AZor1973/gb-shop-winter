@@ -34,7 +34,7 @@ public class ProductController {
     private final ProductImageService productImageService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('product.read') || isAnonymous()")
     public String getProductList(Model model) {
         model.addAttribute("products", productService.findAll());
         return "product/product-list";

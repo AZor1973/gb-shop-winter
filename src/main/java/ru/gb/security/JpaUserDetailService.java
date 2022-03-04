@@ -12,7 +12,6 @@ import ru.gb.api.security.dto.UserDto;
 import ru.gb.dao.security.AccountRoleDao;
 import ru.gb.dao.security.AccountUserDao;
 import ru.gb.entity.security.AccountRole;
-import ru.gb.entity.security.AccountStatus;
 import ru.gb.entity.security.AccountUser;
 import ru.gb.service.UserService;
 import ru.gb.web.dto.mapper.UserMapper;
@@ -49,7 +48,6 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
 
         accountUser.setRoles(Set.of(accountRole));
         accountUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        accountUser.setStatus(AccountStatus.ACTIVE);
 
         AccountUser registeredAccountUser = accountUserDao.save(accountUser);
 
@@ -84,6 +82,11 @@ public class JpaUserDetailService implements UserDetailsService, UserService {
         return accountUserDao.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("User with username = " + username + " not found")
         );
+    }
+
+    @Override
+    public AccountUser update(AccountUser accountUser) {
+        return accountUserDao.save(accountUser);
     }
 
     @Override

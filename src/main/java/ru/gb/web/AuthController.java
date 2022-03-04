@@ -6,13 +6,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.gb.api.security.dto.UserDto;
+import ru.gb.entity.security.AccountStatus;
+import ru.gb.entity.security.AccountUser;
+import ru.gb.service.MailService;
 import ru.gb.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,6 +23,8 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final UserService userService;
+    private final MailService mailService;
+    private Integer code;
 
     @GetMapping("/login")
     public String showLoginForm() {
@@ -46,9 +50,12 @@ public class AuthController {
             model.addAttribute("registrationError", "Пользователь с таким именем уже существует");
             log.info("Username {} already exists", username);
             return "auth/registration-form";
-        } catch (UsernameNotFoundException ignored) {}
+        } catch (UsernameNotFoundException ignored) {
+        }
 
         userService.register(userDto);
+        code = new Random().nextInt(9000) + 1000;
+        mailService.sendMail(userDto.getEmail(), "Подтверждение регистрации", "Код для подтверждения регистрации: " + code);
         log.info("Successfully created user with username: {}", username);
         model.addAttribute("username", username);
         // todo ДЗ 11 - добавить подтверждение email перед конечной активацией
@@ -56,4 +63,19 @@ public class AuthController {
         return "auth/registration-confirmation";
     }
 
+    @PostMapping("/confirm")
+    public String handleConfirmation(@RequestParam String inputCode, @RequestParam String username,
+                                     Model model) {
+        if (code == Integer.parseInt(inputCode)) {
+            AccountUser user = userService.findByUsername(username);
+            user.setStatus(AccountStatus.ACTIVE);
+            user.setEnabled(true);
+            userService.update(user);
+        } else {
+            model.addAttribute("wrongCode", "Неправильный код");
+            model.addAttribute("username", username);
+            return "auth/registration-confirmation";
+        }
+        return "redirect:/product/all";
+    }
 }

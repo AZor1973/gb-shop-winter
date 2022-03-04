@@ -27,7 +27,7 @@ public interface ProductMapper {
 
     default Manufacturer getManufacturer(String manufacturer, @Context ManufacturerDao manufacturerDao) {
         return manufacturerDao.findByName(manufacturer).orElseThrow(
-                () -> new NoSuchElementException("There isn't manufacturer with name" + manufacturer)
+                () -> new NoSuchElementException("There isn't manufacturer with name " + manufacturer)
         );
     }
 
@@ -39,7 +39,7 @@ public interface ProductMapper {
     default Set<Category> categoryDtoSetToCategorySet(Set<CategoryDto> categories, @Context CategoryDao categoryDao) {
         return categories.stream().map(c -> categoryDao.findByTitleAndId(c.getTitle(), c.getCategoryId())
                         .orElseThrow(
-                                () -> new NoSuchElementException("There isn't category with name" + c.getTitle())
+                                () -> new NoSuchElementException("There isn't category with name " + c.getTitle())
                         ))
                 .collect(Collectors.toSet());
     }

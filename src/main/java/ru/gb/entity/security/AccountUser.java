@@ -33,13 +33,14 @@ public class AccountUser implements UserDetails {
     private String phone;
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private AccountStatus status;
+    @Builder.Default
+    private AccountStatus status = AccountStatus.NOT_ACTIVE;
 
     @Singular
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
-    joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
-    inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "ROLE_ID", referencedColumnName = "ID")})
     private Set<AccountRole> roles;
 
 
@@ -67,6 +68,6 @@ public class AccountUser implements UserDetails {
     @Builder.Default
     private boolean credentialsNonExpired = true;
     @Builder.Default
-    private boolean enabled = true;
+    private boolean enabled = false;
 
 }

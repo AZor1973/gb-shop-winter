@@ -28,6 +28,9 @@
                     <a class="nav-link" th:classappend="${activeTab == 'ProductForm' ? 'active' : ''}" th:href="@{/product}">Добавить продукт</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" th:classappend="${activeTab == 'Cart' ? 'active' : ''}" th:href="@{/cart}">Корзина</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="POST">
                         <input type="submit" class="btn btn-danger" value="Выйти"/>
                     </form>

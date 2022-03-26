@@ -15,6 +15,9 @@
 <div th:replace="~{common/navbar :: navi(ProductForm)}" />
 
 <div class="container">
+    <div>
+        <img th:src="@{'/product/images/' + ${product.id}}" alt="" width="50px" height="50px"/>
+    </div>
     <h2 th:text="${'Название: ' + product.title}"></h2>
     <h2 th:text="${'Цена: ' + product.cost}"></h2>
 </div>

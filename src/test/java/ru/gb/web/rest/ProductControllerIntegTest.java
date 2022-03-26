@@ -48,9 +48,8 @@ public class ProductControllerIntegTest {
     final private static String MANUFACTURER_NAME = "Farmer";
     final private static String FIRST_CATEGORY_TITLE = "Fruit";
     final private static String SECOND_CATEGORY_TITLE = "Vegetables";
-    final private static Set<CategoryDto> CATEGORIES = Set.of(
-            CategoryDto.builder().categoryId(1L).title(FIRST_CATEGORY_TITLE).build(),
-            CategoryDto.builder().categoryId(2L).title(SECOND_CATEGORY_TITLE).build());
+    final private static Set<String> CATEGORIES = Set.of(
+            FIRST_CATEGORY_TITLE, SECOND_CATEGORY_TITLE);
 
     @Autowired
     MockMvc mockMvc;

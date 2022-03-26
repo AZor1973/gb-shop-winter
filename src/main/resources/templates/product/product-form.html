@@ -33,10 +33,30 @@
     </div>
 
     <div class="col-md-8">
+        <select class="form-select" aria-label="Default select example" th:field="*{manufacturer}">
+            <option th:each="manufacturer : ${manufacturers}"
+                    th:value="${manufacturer.name}"
+                    th:text="${manufacturer.name}"></option>
+        </select>
+
+    </div>
+
+    <p>
+        <label>Категории:
+            <input type="checkbox" name="categoryList"
+                   th:each="category : ${categoryList}"
+                   th:text="${category.title}"
+                   th:value="${category.title}"
+                   th:field="*{categories}"
+            />
+        </label>
+    </p>
+
+    <div class="col-md-8">
         <div class="input-group mb-2">
             <span class="input-group-text" id="manufactureDate">Дата изготовления</span>
-            <input type="text" class="form-date" name="strManufacture"
-                   id="strManufacture-id" th:value="*{manufactureDate}" placeholder="дд-мм-гггг">
+            <input type="date" class="form-date" name="strManufacture"
+                   id="strManufacture-id" th:value="*{manufactureDate}" placeholder="дд.мм.гггг">
         </div>
     </div>
     

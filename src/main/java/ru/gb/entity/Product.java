@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 import ru.gb.api.common.enums.Status;
 import ru.gb.entity.common.InfoEntity;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table (name = "product")
+@Table(name = "product")
 @EntityListeners(AuditingEntityListener.class)
 public class Product extends InfoEntity {
 
@@ -29,6 +30,7 @@ public class Product extends InfoEntity {
     @Column(name = "cost")
     private BigDecimal cost;
     @Column(name = "manufacture_date")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = {"M/d/yy", "dd.MM.yyyy"})
     private LocalDate manufactureDate;
     @ManyToOne
     @JoinColumn(name = "manufacturer_id")

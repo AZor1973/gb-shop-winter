@@ -36,12 +36,20 @@ public interface ProductMapper {
     }
 
     // todo ДЗ - если что поменять здесь маппинг на list of ids to set of category
-    default Set<Category> categoryDtoSetToCategorySet(Set<CategoryDto> categories, @Context CategoryDao categoryDao) {
-        return categories.stream().map(c -> categoryDao.findByTitleAndId(c.getTitle(), c.getCategoryId())
-                        .orElseThrow(
-                                () -> new NoSuchElementException("There isn't category with name" + c.getTitle())
+//    default Set<Category> categoryDtoSetToCategorySet(Set<CategoryDto> categories, @Context CategoryDao categoryDao) {
+//        return categories.stream().map(c -> categoryDao.findByTitleAndId(c.getTitle(), c.getCategoryId())
+//                        .orElseThrow(
+//                                () -> new NoSuchElementException("There isn't category with name" + c.getTitle())
+//                        ))
+//                .collect(Collectors.toSet());
+//    }
+default Set<Category> categorySetStringToSetCategory(Set<String> categories, @Context CategoryDao categoryDao){
+       return categories.stream().map(c -> categoryDao.findByTitle(c).orElseThrow(
+                                () -> new NoSuchElementException("There isn't category with name" + c)
                         ))
                 .collect(Collectors.toSet());
-    }
-
+}
+default Set<String> categorySetCategoryToSetString(Set<Category> categories){
+        return categories.stream().map(Category::getTitle).collect(Collectors.toSet());
+}
 }

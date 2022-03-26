@@ -69,9 +69,11 @@ public class ProductController {
     }
 
     // @DateTimeFormat если будут проблемы с получением даты из шаблона подставитьт эту аннотацию
+//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, fallbackPatterns = { "M/d/yy", "dd.MM.yyyy" })
     @PostMapping
     @PreAuthorize("hasAnyAuthority('product.create', 'product.update')")
     public String saveProduct(ProductDto productDto) {
+        System.out.println(productDto.getManufactureDate());
         productService.save(productDto);
         return "redirect:/product/all";
     }
@@ -85,6 +87,7 @@ public class ProductController {
 
     // todo ДЗ* - сделать поддержку множества картинок для для страницы подробной информации с продуктами
     @GetMapping(value = "images/{id}", produces = MediaType.IMAGE_PNG_VALUE)
+    @ResponseBody
     public byte[] getImage(@PathVariable Long id) throws IOException {
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

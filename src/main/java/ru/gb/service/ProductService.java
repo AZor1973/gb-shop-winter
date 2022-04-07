@@ -76,6 +76,7 @@ public class ProductService {
     public void deleteById(Long id) {
         try {
             productDao.deleteById(id);
+            identityMap.remove(id);
         } catch (EmptyResultDataAccessException e) {
             log.error(e.getMessage());
         }

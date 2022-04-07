@@ -16,7 +16,6 @@ import ru.gb.dao.ManufacturerDao;
 import ru.gb.dao.ProductDao;
 import ru.gb.entity.Product;
 import ru.gb.web.dto.ProductManufacturerDto;
-import ru.gb.web.dto.mapper.ProductMapper;
 
 import java.util.List;
 import java.util.Optional;

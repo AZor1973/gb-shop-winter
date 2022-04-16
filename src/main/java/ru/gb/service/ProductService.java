@@ -16,9 +16,12 @@ import ru.gb.dao.ManufacturerDao;
 import ru.gb.dao.ProductDao;
 import ru.gb.entity.Product;
 import ru.gb.web.dto.ProductManufacturerDto;
+import ru.gb.web.dto.mapper.ProductMapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +32,7 @@ public class ProductService {
     private final ManufacturerDao manufacturerDao;
     private final CategoryDao categoryDao;
     private final ProductMapper productMapper;
+    private final Map<Long, ProductDto> identityMap = new ConcurrentHashMap<>();
 
     @Transactional(propagation = Propagation.NEVER, isolation = Isolation.DEFAULT)
     public long count() {
@@ -50,7 +54,14 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDto findById(Long id) {
-        return productMapper.toProductDto(productDao.findById(id).orElse(null));
+        ProductDto productDto;
+        if (identityMap.containsKey(id)){
+            productDto = identityMap.get(id);
+        }else {
+            productDto = productMapper.toProductDto(productDao.findById(id).orElse(null));
+            identityMap.put(id, productDto);
+        }
+        return productDto;
     }
 
 
@@ -65,6 +76,7 @@ public class ProductService {
     public void deleteById(Long id) {
         try {
             productDao.deleteById(id);
+            identityMap.remove(id);
         } catch (EmptyResultDataAccessException e) {
             log.error(e.getMessage());
         }
